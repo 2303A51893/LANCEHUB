@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: freelancer-platform
+  labels:
+    app.kubernetes.io/name: freelancer-platform
+    app.kubernetes.io/part-of: lancehub
+

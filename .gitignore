@@ -1,0 +1,46 @@
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Build files
+dist/
+build/
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+
+# Test and coverage output
+.nyc_output/
+
+# Local database files
+*.sqlite
+*.sqlite3
+*.db
+
+# Docker temporary files
+docker-compose.override.yml
+k8s/secret.yaml

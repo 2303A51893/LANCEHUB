@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: freelancer-platform
+  labels:
+    app: lancehub
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lancehub
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: lancehub
+        tier: backend
+    spec:
+      containers:
+        - name: backend
+          image: lancehub-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+              name: http
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: lancehub-config
+                  key: NODE_ENV
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: lancehub-config
+                  key: PORT
+            - name: DB_DIALECT
+              valueFrom:
+                configMapKeyRef:
+                  name: lancehub-config
+                  key: DB_DIALECT
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: lancehub-config
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: lancehub-config
+                  key: DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: lancehub-config
+                  key: DB_NAME
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: lancehub-config
+                  key: DB_USER
+            - name: FORCE_SEED
+              valueFrom:
+                configMapKeyRef:
+                  name: lancehub-config
+                  key: FORCE_SEED
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lancehub-secret
+                  key: DB_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: lancehub-secret
+                  key: JWT_SECRET
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 5000
+            initialDelaySeconds: 25
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
